@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/spinner.css">
     <link rel="stylesheet" href="css/fonts.css">
     <link rel="stylesheet" href="css/styles.css">
     <title>Danya Tetris</title>
@@ -31,7 +32,12 @@
 
     </div>
 
-    
+    <div class="spinner-wrapper" id="loader">
+        <svg viewBox="0 0 50 50" class="spinner">
+            <circle class="ring" cx="25" cy="25" r="22.5" />
+            <circle class="line" cx="25" cy="25" r="22.5" />
+        </svg>
+    </div>
 
     <script src="js/constants.js"></script>
     <script src="js/preload-images.js"></script>
