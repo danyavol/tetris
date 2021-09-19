@@ -1,17 +1,80 @@
 body {
     margin: 0;
-    background-color: #8589ae ;
+    background-color: #636791;
+    font-family: 'Raleway', sans-serif;
+    color: #dddddd;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+    align-items: flex-start;
+}
+
+.title {
+    color: #71dfaf;
+    font-family: 'Pacifico', 'Raleway', sans-serif;
+    text-align: center;
+}
+
+.info-section {
+    margin-right: 20px;
+    padding: 30px;
+    border-radius: 5px;
+    box-shadow: 5px 5px 5px rgb(0, 0, 0, 0.4);
+    background-color: #2d2d2d;
+}
+
+.info-section > *:not(:last-child) {
+    margin-bottom: 20px;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 #game-field {
     background-image: url('../img/empty.png');
     background-repeat: repeat;
-    border: 3px solid black;
-    border-radius: 5px;
     position: relative;
-    margin: 20px auto;
+
+    border: 3px solid #2d2d2d;
+    border-radius: 5px;
+    box-shadow: 5px 5px 5px rgb(0, 0, 0, 0.4);
+}
+
+.buttons-section {
+    display: none;
+    height: 60px;
+}
+
+#next-piece {
+    position: relative;
 }
 
 .piece {
     position: absolute;
+}
+
+@media only screen and (max-width: 600px) {
+    .container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .info-section {
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+
+    #game-field {
+        margin: auto;
+    }
+
+    .buttons-section {
+        display: block;
+    }
 }

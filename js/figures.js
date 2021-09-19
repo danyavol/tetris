@@ -2,10 +2,13 @@
 
 class BasicFigure {
     
-    constructor(defaultRotation, rotationConfig) {
+    constructor(defaultRotation, rotationConfig, piecesConfig, defaultIndent, rootElement, withIndent = true) {
         this.rotation = defaultRotation;
         this.rotationConfig = rotationConfig;
-        this.pieces = [];
+        this.rootElement = rootElement;
+        
+        this._initPieces(piecesConfig, withIndent ? defaultIndent : [0, 0]);
+        this.render();
     }
 
     rotate() {
@@ -28,11 +31,22 @@ class BasicFigure {
     render() {
         this.pieces.forEach(piece => piece.render());
     }
+
+    _initPieces(piecesConfig, indent) {
+        this.pieces = [];
+        piecesConfig.forEach(pieceArgs => {
+            pieceArgs[0] += indent[0];
+            pieceArgs[1] += indent[1];
+            this.pieces.push(
+                new BasicPiece(...pieceArgs, this.rotation, this.rootElement)
+            );
+        });
+    }
     
 }
 
 class BasicPiece {
-    constructor(x, y, imgName, rotation) {
+    constructor(x, y, imgName, rotation, rootElement) {
         this.x = x;
         this.y = y;
         this.rotation = rotation;
@@ -47,7 +61,8 @@ class BasicPiece {
         this.element.src = FIGURES_PATH + imgName;
         this.element.style.width = `${CELL_SIZE}px`;
         this.element.style.height = `${CELL_SIZE}px`;
-        gameFieldElement.appendChild(this.element);
+
+        rootElement.appendChild(this.element);
     }
 
     adjustPosition(x = 0, y = 0) {
@@ -65,9 +80,8 @@ class BasicPiece {
 
 /*************** Common Figures ***************/
 
-
 class OFigure extends BasicFigure {
-    constructor() {
+    constructor(...args) {
         const defaultRotation = 0;
         const rotationConfig = [
             [ [1, 0], [0, 1], [0, -1], [-1, 0] ],
@@ -75,26 +89,17 @@ class OFigure extends BasicFigure {
             [ [-1, 0], [0, -1], [0, 1], [1, 0] ],
             [ [0, -1], [1, 0], [-1, 0], [0, 1] ]
         ];
+        const piecesConfig = [
+            [0, 0, 'O0.png'], [1, 0, 'O1.png'], [0, 1, 'O2.png'], [1, 1, 'O3.png']
+        ];
+        const defaultIndent = [4, 1];
 
-        super(defaultRotation, rotationConfig);
-
-        this.initPieces();
-        super.render();
+        super(defaultRotation, rotationConfig, piecesConfig, defaultIndent, ...args);
     }
-
-    initPieces() {
-       this.pieces = [
-            new BasicPiece(4, 1, 'O0.png', this.rotation),
-            new BasicPiece(5, 1, 'O1.png', this.rotation),
-            new BasicPiece(4, 2, 'O2.png', this.rotation),
-            new BasicPiece(5, 2, 'O3.png', this.rotation)
-       ];
-    }
-
 }
 
 class IFigure extends BasicFigure {
-    constructor() {
+    constructor(...args) {
         const defaultRotation = 3;
         const rotationConfig = [
             [ [1, 2], [0, 1], [-1, 0], [-2, -1] ],
@@ -102,26 +107,17 @@ class IFigure extends BasicFigure {
             [ [-1, -2], [0, -1], [1, 0], [2, 1] ],
             [ [2, -1], [1, 0], [0, 1], [-1, 2] ]
         ];
+        const piecesConfig = [
+            [0, 0, 'I0.png'], [1, 0, 'I1.png'], [2, 0, 'I2.png'], [3, 0, 'I3.png']
+        ];
+        const defaultIndent = [3, 1];
 
-        super(defaultRotation, rotationConfig);
-
-        this.initPieces();
-        super.render();
+        super(defaultRotation, rotationConfig, piecesConfig, defaultIndent, ...args);
     }
-
-    initPieces() {
-       this.pieces = [
-            new BasicPiece(3, 1, 'I0.png', this.rotation),
-            new BasicPiece(4, 1, 'I1.png', this.rotation),
-            new BasicPiece(5, 1, 'I2.png', this.rotation),
-            new BasicPiece(6, 1, 'I3.png', this.rotation)
-       ];
-    }
-
 }
 
 class TFigure extends BasicFigure {
-    constructor() {
+    constructor(...args) {
         const defaultRotation = 3;
         const rotationConfig = [
             [ [1, 1], [0, 0], [-1, 1], [-1, -1] ],
@@ -129,26 +125,17 @@ class TFigure extends BasicFigure {
             [ [-1, -1], [0, 0], [1, -1], [1, 1] ],
             [ [1, -1], [0, 0], [1, 1], [-1, 1] ]
         ];
+        const piecesConfig = [
+            [0, 1, 'T0.png'], [1, 1, 'T1.png'], [1, 0, 'T2.png'], [2, 1, 'T3.png']
+        ];
+        const defaultIndent = [3, 0];
 
-        super(defaultRotation, rotationConfig);
-
-        this.initPieces();
-        super.render();
+        super(defaultRotation, rotationConfig, piecesConfig, defaultIndent, ...args);
     }
-
-    initPieces() {
-       this.pieces = [
-            new BasicPiece(3, 1, 'T0.png', this.rotation),
-            new BasicPiece(4, 1, 'T1.png', this.rotation),
-            new BasicPiece(4, 0, 'T2.png', this.rotation),
-            new BasicPiece(5, 1, 'T3.png', this.rotation)
-       ];
-    }
-
 }
 
 class SFigure extends BasicFigure {
-    constructor() {
+    constructor(...args) {
         const defaultRotation = 3;
         const rotationConfig = [
             [ [1, 1], [0, 0], [-1, 1], [-2, 0] ],
@@ -156,26 +143,17 @@ class SFigure extends BasicFigure {
             [ [-1, -1], [0, 0], [1, -1], [2, 0] ],
             [ [1, -1], [0, 0], [1, 1], [0, 2] ]
         ];
+        const piecesConfig = [
+            [0, 1, 'S0.png'], [1, 1, 'S1.png'], [1, 0, 'S2.png'], [2, 0, 'S3.png']
+        ];
+        const defaultIndent = [3, 0];
 
-        super(defaultRotation, rotationConfig);
-
-        this.initPieces();
-        super.render();
+        super(defaultRotation, rotationConfig, piecesConfig, defaultIndent, ...args);
     }
-
-    initPieces() {
-       this.pieces = [
-            new BasicPiece(3, 1, 'S0.png', this.rotation),
-            new BasicPiece(4, 1, 'S1.png', this.rotation),
-            new BasicPiece(4, 0, 'S2.png', this.rotation),
-            new BasicPiece(5, 0, 'S3.png', this.rotation)
-       ];
-    }
-
 }
 
 class ZFigure extends BasicFigure {
-    constructor() {
+    constructor(...args) {
         const defaultRotation = 3;
         const rotationConfig = [
             [ [0, 2], [0, 0], [-1, 1], [-1, -1] ],
@@ -183,26 +161,17 @@ class ZFigure extends BasicFigure {
             [ [0, -2], [0, 0], [1, -1], [1, 1] ],
             [ [2, 0], [0, 0], [1, 1], [-1, 1] ]
         ];
+        const piecesConfig = [
+            [0, 0, 'Z0.png'], [1, 1, 'Z1.png'], [1, 0, 'Z2.png'], [2, 1, 'Z3.png']
+        ];
+        const defaultIndent = [3, 0];
 
-        super(defaultRotation, rotationConfig);
-
-        this.initPieces();
-        super.render();
+        super(defaultRotation, rotationConfig, piecesConfig, defaultIndent, ...args);
     }
-
-    initPieces() {
-       this.pieces = [
-            new BasicPiece(3, 0, 'Z0.png', this.rotation),
-            new BasicPiece(4, 1, 'Z1.png', this.rotation),
-            new BasicPiece(4, 0, 'Z2.png', this.rotation),
-            new BasicPiece(5, 1, 'Z3.png', this.rotation)
-       ];
-    }
-
 }
 
 class JFigure extends BasicFigure {
-    constructor() {
+    constructor(...args) {
         const defaultRotation = 3;
         const rotationConfig = [
             [ [1, 1], [0, 2], [0, 0], [-1, -1] ],
@@ -210,26 +179,17 @@ class JFigure extends BasicFigure {
             [ [-1, -1], [0, -2], [0, 0], [1, 1] ],
             [ [1, -1], [2, 0], [0, 0], [-1, 1] ]
         ];
+        const piecesConfig = [
+            [0, 1, 'J0.png'], [0, 0, 'J1.png'], [1, 1, 'J2.png'], [2, 1, 'J3.png']
+        ];
+        const defaultIndent = [3, 0];
 
-        super(defaultRotation, rotationConfig);
-
-        this.initPieces();
-        super.render();
+        super(defaultRotation, rotationConfig, piecesConfig, defaultIndent, ...args);
     }
-
-    initPieces() {
-       this.pieces = [
-            new BasicPiece(3, 1, 'J0.png', this.rotation),
-            new BasicPiece(3, 0, 'J1.png', this.rotation),
-            new BasicPiece(4, 1, 'J2.png', this.rotation),
-            new BasicPiece(5, 1, 'J3.png', this.rotation)
-       ];
-    }
-
 }
 
 class LFigure extends BasicFigure {
-    constructor() {
+    constructor(...args) {
         const defaultRotation = 1;
         const rotationConfig = [
             [ [2, 0], [1, 1], [0, 0], [-1, -1] ],
@@ -237,20 +197,11 @@ class LFigure extends BasicFigure {
             [ [-2, 0], [-1, -1], [0, 0], [1, 1] ],
             [ [0, -2], [1, -1], [0, 0], [-1, 1] ]
         ];
+        const piecesConfig = [
+            [2, 0, 'L0.png'], [2, 1, 'L1.png'], [1, 1, 'L2.png'], [0, 1, 'L3.png']
+        ];
+        const defaultIndent = [3, 0];
         
-        super(defaultRotation, rotationConfig);
-
-        this.initPieces();
-        super.render();
+        super(defaultRotation, rotationConfig, piecesConfig, defaultIndent, ...args);
     }
-
-    initPieces() {
-       this.pieces = [
-            new BasicPiece(5, 0, 'L0.png', this.rotation),
-            new BasicPiece(5, 1, 'L1.png', this.rotation),
-            new BasicPiece(4, 1, 'L2.png', this.rotation),
-            new BasicPiece(3, 1, 'L3.png', this.rotation)
-       ];
-    }
-
 }

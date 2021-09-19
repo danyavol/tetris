@@ -4,15 +4,37 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">  
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/fonts.css">
     <link rel="stylesheet" href="css/styles.css">
     <title>Danya Tetris</title>
 </head>
 <body>
 
-    <div id="game-field"></div>
+    <div class="container">
+        <div class="info-section">
+            <h2 class="title">Danya Tetris</h2>
+            <div class="menu">
+                <button id="new-game-btn">New Game</button>
+                <button id="pause-btn">Pause</button>
+            </div>
+            <div id="next-piece">
+            </div>
+            <div class="stats">Statistics:</div>
+        </div>
+
+        <div id="game-field"></div>
+
+        <div class="buttons-section">
+            Buttons
+        </div>
+
+    </div>
+
+    
 
     <script src="js/constants.js"></script>
+    <script src="js/preload-images.js"></script>
     <script src="js/game-map.js"></script>
     <script src="js/figures.js"></script>
     <script src="js/index.js"></script>

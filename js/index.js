@@ -1,4 +1,7 @@
 const gameFieldElement = document.querySelector('#game-field');
+const nextPieceElement = document.querySelector('#next-piece');
+nextPieceElement.style.height = `${CELL_SIZE*2}px`;
+nextPieceElement.style.width = `${CELL_SIZE*4}px`;
 const gameMap = new GameMap();
 let currentFigure = null;
 
@@ -10,8 +13,10 @@ gameFieldElement.style = `
 `;
 
 
+currentFigure = new LFigure(gameFieldElement);
 
-currentFigure = new ZFigure();
+new OFigure(nextPieceElement, false);
+
 
 
 
