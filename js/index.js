@@ -11,7 +11,7 @@ gameFieldElement.style = `
 
 
 
-currentFigure = new OFigure();
+currentFigure = new ZFigure();
 
 
 

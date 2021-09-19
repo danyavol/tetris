@@ -66,14 +66,41 @@ class BasicPiece {
 /*************** Common Figures ***************/
 
 
+class OFigure extends BasicFigure {
+    constructor() {
+        const defaultRotation = 0;
+        const rotationConfig = [
+            [ [1, 0], [0, 1], [0, -1], [-1, 0] ],
+            [ [0, 1], [-1, 0], [1, 0], [0, -1] ],
+            [ [-1, 0], [0, -1], [0, 1], [1, 0] ],
+            [ [0, -1], [1, 0], [-1, 0], [0, 1] ]
+        ];
+
+        super(defaultRotation, rotationConfig);
+
+        this.initPieces();
+        super.render();
+    }
+
+    initPieces() {
+       this.pieces = [
+            new BasicPiece(4, 1, 'O0.png', this.rotation),
+            new BasicPiece(5, 1, 'O1.png', this.rotation),
+            new BasicPiece(4, 2, 'O2.png', this.rotation),
+            new BasicPiece(5, 2, 'O3.png', this.rotation)
+       ];
+    }
+
+}
+
 class IFigure extends BasicFigure {
     constructor() {
         const defaultRotation = 3;
         const rotationConfig = [
-            [ [2, 1], [1, 0], [0, -1], [-1, -2] ],
-            [ [-2, 2], [-1, 1], [0, 0], [1, -1] ],
+            [ [1, 2], [0, 1], [-1, 0], [-2, -1] ],
+            [ [-2, 1], [-1, 0], [0, -1], [1, -2] ],
             [ [-1, -2], [0, -1], [1, 0], [2, 1] ],
-            [ [1, -1], [0, 0], [-1, 1], [-2, 2] ]
+            [ [2, -1], [1, 0], [0, 1], [-1, 2] ]
         ];
 
         super(defaultRotation, rotationConfig);
@@ -93,90 +120,9 @@ class IFigure extends BasicFigure {
 
 }
 
-class JFigure extends BasicFigure {
-    constructor() {
-        const defaultRotation = 0;
-        const rotationConfig = [
-            [ [1, 1], [0, 2], [0, 0], [-1, -1] ],
-            [ [-1, 1], [-2, 0], [0, 0], [1, -1] ],
-            [ [-1, -1], [0, -2], [0, 0], [1, 1] ],
-            [ [1, -1], [2, 0], [0, 0], [-1, 1] ]
-        ];
-
-        super(defaultRotation, rotationConfig);
-
-        this.initPieces();
-        super.render();
-    }
-
-    initPieces() {
-       this.pieces = [
-            new BasicPiece(4, 0, 'J0.png', this.rotation),
-            new BasicPiece(5, 0, 'J1.png', this.rotation),
-            new BasicPiece(4, 1, 'J2.png', this.rotation),
-            new BasicPiece(4, 2, 'J3.png', this.rotation)
-       ];
-    }
-
-}
-
-class LFigure extends BasicFigure {
-    constructor() {
-        const defaultRotation = 0;
-        const rotationConfig = [
-            [ [2, 0], [1, 1], [0, 0], [-1, -1] ],
-            [ [0, 2], [-1, 1], [0, 0], [1, -1] ],
-            [ [-2, 0], [-1, -1], [0, 0], [1, 1] ],
-            [ [0, -2], [1, -1], [0, 0], [-1, 1] ]
-        ];
-        
-        super(defaultRotation, rotationConfig);
-
-        this.initPieces();
-        super.render();
-    }
-
-    initPieces() {
-       this.pieces = [
-            new BasicPiece(3, 0, 'L0.png', this.rotation),
-            new BasicPiece(4, 0, 'L1.png', this.rotation),
-            new BasicPiece(4, 1, 'L2.png', this.rotation),
-            new BasicPiece(4, 2, 'L3.png', this.rotation)
-       ];
-    }
-
-}
-
-class OFigure extends BasicFigure {
-    constructor() {
-        const defaultRotation = 0;
-        const rotationConfig = [
-            [ [1, 0], [0, 1], [0, -1], [-1, 0] ],
-            [ [0, 1], [-1, 0], [1, 0], [0, -1] ],
-            [ [-1, 0], [0, -1], [0, 1], [1, 0] ],
-            [ [0, -1], [1, 0], [-1, 0], [0, 1] ]
-        ];
-
-        super(defaultRotation, rotationConfig);
-
-        this.initPieces();
-        super.render();
-    }
-
-    initPieces() {
-       this.pieces = [
-            new BasicPiece(4, 0, 'O0.png', this.rotation),
-            new BasicPiece(5, 0, 'O1.png', this.rotation),
-            new BasicPiece(4, 1, 'O2.png', this.rotation),
-            new BasicPiece(5, 1, 'O3.png', this.rotation)
-       ];
-    }
-
-}
-
 class TFigure extends BasicFigure {
     constructor() {
-        const defaultRotation = 0;
+        const defaultRotation = 3;
         const rotationConfig = [
             [ [1, 1], [0, 0], [-1, 1], [-1, -1] ],
             [ [-1, 1], [0, 0], [-1, -1], [1, -1] ],
@@ -192,12 +138,119 @@ class TFigure extends BasicFigure {
 
     initPieces() {
        this.pieces = [
-            new BasicPiece(4, 0, 'T0.png', this.rotation),
+            new BasicPiece(3, 1, 'T0.png', this.rotation),
             new BasicPiece(4, 1, 'T1.png', this.rotation),
-            new BasicPiece(5, 1, 'T2.png', this.rotation),
-            new BasicPiece(4, 2, 'T3.png', this.rotation)
+            new BasicPiece(4, 0, 'T2.png', this.rotation),
+            new BasicPiece(5, 1, 'T3.png', this.rotation)
        ];
     }
 
 }
 
+class SFigure extends BasicFigure {
+    constructor() {
+        const defaultRotation = 3;
+        const rotationConfig = [
+            [ [1, 1], [0, 0], [-1, 1], [-2, 0] ],
+            [ [-1, 1], [0, 0], [-1, -1], [0, -2] ],
+            [ [-1, -1], [0, 0], [1, -1], [2, 0] ],
+            [ [1, -1], [0, 0], [1, 1], [0, 2] ]
+        ];
+
+        super(defaultRotation, rotationConfig);
+
+        this.initPieces();
+        super.render();
+    }
+
+    initPieces() {
+       this.pieces = [
+            new BasicPiece(3, 1, 'S0.png', this.rotation),
+            new BasicPiece(4, 1, 'S1.png', this.rotation),
+            new BasicPiece(4, 0, 'S2.png', this.rotation),
+            new BasicPiece(5, 0, 'S3.png', this.rotation)
+       ];
+    }
+
+}
+
+class ZFigure extends BasicFigure {
+    constructor() {
+        const defaultRotation = 3;
+        const rotationConfig = [
+            [ [0, 2], [0, 0], [-1, 1], [-1, -1] ],
+            [ [-2, 0], [0, 0], [-1, -1], [1, -1] ],
+            [ [0, -2], [0, 0], [1, -1], [1, 1] ],
+            [ [2, 0], [0, 0], [1, 1], [-1, 1] ]
+        ];
+
+        super(defaultRotation, rotationConfig);
+
+        this.initPieces();
+        super.render();
+    }
+
+    initPieces() {
+       this.pieces = [
+            new BasicPiece(3, 0, 'Z0.png', this.rotation),
+            new BasicPiece(4, 1, 'Z1.png', this.rotation),
+            new BasicPiece(4, 0, 'Z2.png', this.rotation),
+            new BasicPiece(5, 1, 'Z3.png', this.rotation)
+       ];
+    }
+
+}
+
+class JFigure extends BasicFigure {
+    constructor() {
+        const defaultRotation = 3;
+        const rotationConfig = [
+            [ [1, 1], [0, 2], [0, 0], [-1, -1] ],
+            [ [-1, 1], [-2, 0], [0, 0], [1, -1] ],
+            [ [-1, -1], [0, -2], [0, 0], [1, 1] ],
+            [ [1, -1], [2, 0], [0, 0], [-1, 1] ]
+        ];
+
+        super(defaultRotation, rotationConfig);
+
+        this.initPieces();
+        super.render();
+    }
+
+    initPieces() {
+       this.pieces = [
+            new BasicPiece(3, 1, 'J0.png', this.rotation),
+            new BasicPiece(3, 0, 'J1.png', this.rotation),
+            new BasicPiece(4, 1, 'J2.png', this.rotation),
+            new BasicPiece(5, 1, 'J3.png', this.rotation)
+       ];
+    }
+
+}
+
+class LFigure extends BasicFigure {
+    constructor() {
+        const defaultRotation = 1;
+        const rotationConfig = [
+            [ [2, 0], [1, 1], [0, 0], [-1, -1] ],
+            [ [0, 2], [-1, 1], [0, 0], [1, -1] ],
+            [ [-2, 0], [-1, -1], [0, 0], [1, 1] ],
+            [ [0, -2], [1, -1], [0, 0], [-1, 1] ]
+        ];
+        
+        super(defaultRotation, rotationConfig);
+
+        this.initPieces();
+        super.render();
+    }
+
+    initPieces() {
+       this.pieces = [
+            new BasicPiece(5, 0, 'L0.png', this.rotation),
+            new BasicPiece(5, 1, 'L1.png', this.rotation),
+            new BasicPiece(4, 1, 'L2.png', this.rotation),
+            new BasicPiece(3, 1, 'L3.png', this.rotation)
+       ];
+    }
+
+}
