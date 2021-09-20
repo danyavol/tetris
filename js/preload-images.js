@@ -13,7 +13,7 @@ const images = [];
         const img = new Image();
         img.onload = () => {
             if (++totalImagesLoaded >= imgUrls.length) 
-                document.getElementById('loader').style.opacity = '0';
+                document.getElementById('loader').classList.add('hidden');
         };
         img.src = url;
         images.push(img);

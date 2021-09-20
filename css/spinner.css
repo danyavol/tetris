@@ -9,6 +9,12 @@
     transition: opacity 0.4s;
 }
 
+.spinner-wrapper.hidden {
+    opacity: 0;
+    transition: opacity 0.4s;
+    visibility: hidden;
+}
+
 .spinner {
     position: fixed;
     left: 50%;

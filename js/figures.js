@@ -16,7 +16,6 @@ class BasicFigure {
         const conf = this.rotationConfig[this.rotation];
         this.pieces.forEach( (piece, i) => piece.adjustPosition(...conf[i]) );
 
-
         /** Update pieces rotation */
         if (this.rotation < 3) this.rotation++;
         else this.rotation = 0;
@@ -25,6 +24,21 @@ class BasicFigure {
 
         // TODO: Check if piece not out of border or not cross other pieces
 
+        this.render();
+    }
+
+    cellDown() {
+        this.pieces.forEach(piece => piece.y++);
+        this.render();
+    }
+
+    moveRight() {
+        this.pieces.forEach(piece => piece.x++);
+        this.render();
+    }
+
+    moveLeft() {
+        this.pieces.forEach(piece => piece.x--);
         this.render();
     }
 
@@ -76,6 +90,27 @@ class BasicPiece {
         this.element.style.transform = `rotate(${this.rotation*90}deg)`;
     }
     
+}
+
+function randomInteger(min, max) {
+    const rand = min + Math.random() * (max - min);
+    return Math.floor(rand);
+}
+
+function getRandomFigureNumber() {
+    return randomInteger(0, 6);
+}
+
+function getFigureByNumber(num, ...params) {
+    switch (num) {
+        case 0: return new OFigure(...params);
+        case 1: return new IFigure(...params);
+        case 2: return new TFigure(...params);
+        case 3: return new SFigure(...params);
+        case 4: return new ZFigure(...params);
+        case 5: return new JFigure(...params);
+        case 6: return new LFigure(...params);
+    }
 }
 
 /*************** Common Figures ***************/
