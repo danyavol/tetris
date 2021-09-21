@@ -2,6 +2,11 @@ if (document.documentElement.clientWidth < 600) {
     document.getElementById('mobile-menu').classList.remove('hidden');
 }
 
+window.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+});
+
 /*************** Game controls ***************/
 
 document.addEventListener('keydown', (e) => {
