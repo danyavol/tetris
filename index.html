@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="css/default.css">
+    <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/spinner.css">
     <link rel="stylesheet" href="css/fonts.css">
+    <link rel="stylesheet" href="css/buttons.css">
     <link rel="stylesheet" href="css/styles.css">
     <title>Danya Tetris</title>
 </head>
@@ -16,16 +17,21 @@
     <div class="container">
         <div class="info-section">
             <h2 class="title">Danya Tetris</h2>
-            <div class="menu">
-                <button class="button" id="new-game-btn">New Game</button>
-                <button class="button" id="pause-btn">Pause</button>
+            <div class="btn-menu">
+                <button class="button game-control-btn">Start game</button>
+                <button class="button restart-btn d-none">Restart game</button>
             </div>
             <div class="game-info-section">
                 <div id="next-piece"></div>
                 <div class="stats">
-                    <div>Score: <span id="stats-scrore"></span></div>
-                    <div>Lines: <span id="stats-lines"></span></div>
-                    <div>Time: <span id="stats-time"></span></div>
+                    <div>Score: <span id="stats-scrore">0</span></div>
+                    <div>Lines: <span id="stats-lines">0</span></div>
+                    <div>Time: <span id="stats-time">0</span></div>
+                </div>
+                <div class="mobile-pause">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px">
+                        <path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                    </svg>
                 </div>
             </div>
         </div>
@@ -33,20 +39,30 @@
         <div id="game-field"></div>
 
         <div class="buttons-section">
-            <div class="control-btn">
+            <div class="control-btn" id="control-btn-left">
                 <img src="icons/left-arrow.svg">
             </div>
-            <div class="control-btn">
+            <div class="control-btn" id="control-btn-right">
                 <img src="icons/right-arrow.svg">
             </div>
-            <div class="control-btn">
+            <div class="control-btn" id="control-btn-rotate">
                 <img src="icons/rotate.svg">
             </div>
-            <div class="control-btn">
+            <div class="control-btn" id="control-btn-down">
                 <img src="icons/down-arrow.svg">
             </div>
         </div>
 
+    </div>
+
+    <div class="mobile-menu-wrapper hidden" id="mobile-menu">
+        <div class="mobile-menu">
+            <h2 class="mobile-title">Danya Tetris</h2>
+            <div class="mobile-btn-menu">
+                <button class="button btn-big game-control-btn">Start game</button>
+                <button class="button btn-big restart-btn d-none">Restart game</button>
+            </div>
+        </div>
     </div>
 
     <div class="spinner-wrapper" id="loader">
@@ -61,5 +77,6 @@
     <script src="js/game-map.js"></script>
     <script src="js/figures.js"></script>
     <script src="js/index.js"></script>
+    <script src="js/event-binding.js"></script>
 </body>
 </html>

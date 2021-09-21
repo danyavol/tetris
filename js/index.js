@@ -3,11 +3,12 @@ nextPieceElement.style.height = `${CELL_SIZE*2}px`;
 nextPieceElement.style.width = `${CELL_SIZE*4}px`;
 
 const Game = {
+    started: false,
     paused: true,
     fieldElement: document.querySelector('#game-field'),
     map: new GameMap(),
     gameInterval: null,
-    currentSpeed: 1,
+    currentSpeed: 1.25,
     currentFigure: null,
     _nextFigureNumber: null,
     set nextFigure(number) {
@@ -19,12 +20,21 @@ const Game = {
         return this._nextFigureNumber;
     },
     start() {
+        this.started = true;
         this.paused = false;
+        step();
         this.gameInterval = setInterval(step, 1000/this.currentSpeed);
     },
-    stop() {
+    pause() {
         this.paused = true;
         clearInterval(this.gameInterval);
+    },
+    reset() {
+        this.pause();
+        this.started = false;
+        this.currentFigure = null;
+        this._nextFigureNumber = null;
+        this.currentSpeed = 1;
     },
     updateNextFigure() {
 
@@ -43,37 +53,6 @@ Game.fieldElement.style = `
 
 
 
-
-
-
-
-document.addEventListener('keydown', (e) => {
-    if (!Game.paused && Game.currentFigure)
-        switch (e.code) {
-            case 'ArrowUp':
-                Game.currentFigure.rotate();
-                break;
-            case 'ArrowRight':
-                Game.currentFigure.moveRight();
-                break;
-            case 'ArrowLeft':
-                Game.currentFigure.moveLeft();
-                break;
-            case 'ArrowDown':
-                break;
-            case 'Space':
-                break;
-        }
-});
-
-document.getElementById('new-game-btn').addEventListener('click', () => {
-    Game.start();
-});
-
-document.getElementById('pause-btn').addEventListener('click', () => {
-    Game.stop();
-});
-
 function step() {
     if (!Game.currentFigure && !Game.nextFigureNumber) {
         // Very first step
@@ -89,10 +68,3 @@ function step() {
 
     }
 }
-
-function getRandomFigure(...args) {
-    
-}
-
-
-

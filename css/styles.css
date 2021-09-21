@@ -1,15 +1,14 @@
-.container {
-    display: flex;
-    justify-content: center;
-    margin: 10px;
-    align-items: flex-start;
-}
+/************* Info section *************/
 
-.title {
+.title, .mobile-title {
     color: var(--primary-color);
     font-family: 'Pacifico', 'Raleway', sans-serif;
     text-align: center;
     margin: 0;
+}
+
+.mobile-title {
+    font-size: 30px;
 }
 
 .info-section {
@@ -24,11 +23,85 @@
     margin-bottom: 20px;
 }
 
-.menu {
+.btn-menu, .mobile-btn-menu {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
+#next-piece {
+    position: relative;
+    margin: auto;
+    margin-bottom: 20px;
+}
+
+.stats >*:not(:last-child) {
+    margin-bottom: 5px;
+}
+
+.mobile-menu-wrapper {
+    opacity: 1;
+    transition: opacity 0.4s;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.mobile-menu-wrapper.hidden {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .4s, visibility 0s .4s; 
+}
+
+.mobile-menu {
+    background-color: var(--card-bg-color);
+    border-radius: var(--border-radius);
+    box-shadow: 5px 5px 5px rgb(0, 0, 0, 0.4);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: calc(100vw - 40px);
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+.mobile-menu > *:not(:last-child) {
+    margin-bottom: 20px;
+}
+
+@media only screen and (max-width: 600px) {
+    .info-section {
+        margin-right: 0;
+        margin-bottom: 15px;
+        padding: 10px;
+    }
+
+    .title {
+        display: none;
+    }
+
+    .btn-menu {
+        display: none;
+    }
+
+    #next-piece {
+        margin: auto;
+    }
+
+    .stats {
+        flex-basis: 150px;
+    }
+
+    .game-info-section {
+        display: flex;
+        align-items: center;
+    }
+}
+
+/************* Game field *************/
 
 #game-field {
     background-image: url('../img/empty.png');
@@ -40,51 +113,19 @@
     box-shadow: 5px 5px 5px rgb(0, 0, 0, 0.4);
 }
 
-.buttons-section {
-    display: none;
-    justify-content: space-between;
-    height: 64px;
-}
-
-#next-piece {
-    position: relative;
-    margin: auto;
-    margin-bottom: 20px;
-}
-
 .piece {
     position: absolute;
 }
 
-.stats >*:not(:last-child) {
-    margin-bottom: 5px;
+.buttons-section {
+    display: none;
+    justify-content: space-between;
+    height: 64px;
+    flex-grow: 1;
+    align-items: center;
 }
 
 @media only screen and (max-width: 600px) {
-    .container {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .game-info-section {
-        display: flex;
-        align-items: center;
-    }
-
-    #next-piece {
-        margin: auto;
-    }
-
-    .stats {
-        flex-basis: 125px;
-    }
-
-    .info-section {
-        margin-right: 0;
-        margin-bottom: 15px;
-        padding: 10px;
-    }
-
     #game-field {
         margin: auto;
     }
