@@ -37,7 +37,7 @@
 .control-btn > * {
     width: 34px;
     transition: .2s;
-    -webkit-user-drag: none
+    pointer-events: none;
 }
 
 .control-btn:active {
