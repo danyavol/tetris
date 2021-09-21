@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/default.css">
     <link rel="stylesheet" href="css/spinner.css">
     <link rel="stylesheet" href="css/fonts.css">
     <link rel="stylesheet" href="css/styles.css">
@@ -16,18 +17,34 @@
         <div class="info-section">
             <h2 class="title">Danya Tetris</h2>
             <div class="menu">
-                <button id="new-game-btn">New Game</button>
-                <button id="pause-btn">Pause</button>
+                <button class="button" id="new-game-btn">New Game</button>
+                <button class="button" id="pause-btn">Pause</button>
             </div>
-            <div id="next-piece">
+            <div class="game-info-section">
+                <div id="next-piece"></div>
+                <div class="stats">
+                    <div>Score: <span id="stats-scrore"></span></div>
+                    <div>Lines: <span id="stats-lines"></span></div>
+                    <div>Time: <span id="stats-time"></span></div>
+                </div>
             </div>
-            <div class="stats">Statistics:</div>
         </div>
 
         <div id="game-field"></div>
 
         <div class="buttons-section">
-            Buttons
+            <div class="control-btn">
+                <img src="icons/left-arrow.svg">
+            </div>
+            <div class="control-btn">
+                <img src="icons/right-arrow.svg">
+            </div>
+            <div class="control-btn">
+                <img src="icons/rotate.svg">
+            </div>
+            <div class="control-btn">
+                <img src="icons/down-arrow.svg">
+            </div>
         </div>
 
     </div>
