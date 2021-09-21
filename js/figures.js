@@ -77,6 +77,7 @@ class BasicPiece {
         this.element.style.height = `${CELL_SIZE}px`;
         this.element.addEventListener('contextmenu', (e) => {
             e.preventDefault();
+            e.stopPropagation();
         });
 
         rootElement.appendChild(this.element);

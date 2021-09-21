@@ -32,11 +32,15 @@ const Game = {
         this.currentFigure = null;
         this._nextFigureNumber = null;
         this.currentSpeed = 1;
-        this.fieldElement.innerHTML = '';
-        this.nextPieceElement.innerHTML = '';
+        this._clearElement(this.fieldElement);
+        this._clearElement(this.nextPieceElement);
     },
     updateNextFigure() {
 
+    },
+    _clearElement(element) {
+        while (element.firstChild) 
+            element.removeChild(element.firstChild);
     }
 };
 
