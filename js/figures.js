@@ -75,6 +75,9 @@ class BasicPiece {
         this.element.src = FIGURES_PATH + imgName;
         this.element.style.width = `${CELL_SIZE}px`;
         this.element.style.height = `${CELL_SIZE}px`;
+        this.element.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+        });
 
         rootElement.appendChild(this.element);
     }

@@ -1,11 +1,8 @@
-const nextPieceElement = document.querySelector('#next-piece');
-nextPieceElement.style.height = `${CELL_SIZE*2}px`;
-nextPieceElement.style.width = `${CELL_SIZE*4}px`;
-
 const Game = {
     started: false,
     paused: true,
     fieldElement: document.querySelector('#game-field'),
+    nextPieceElement: document.querySelector('#next-piece'),
     map: new GameMap(),
     gameInterval: null,
     currentSpeed: 1.25,
@@ -13,8 +10,8 @@ const Game = {
     _nextFigureNumber: null,
     set nextFigure(number) {
         this._nextFigureNumber = number;
-        nextPieceElement.innerHTML = '';
-        getFigureByNumber(number, nextPieceElement, false);
+        this.nextPieceElement.innerHTML = '';
+        getFigureByNumber(number, this.nextPieceElement, false);
     },
     get nextFigure() {
         return this._nextFigureNumber;
@@ -35,6 +32,8 @@ const Game = {
         this.currentFigure = null;
         this._nextFigureNumber = null;
         this.currentSpeed = 1;
+        this.fieldElement.innerHTML = '';
+        this.nextPieceElement.innerHTML = '';
     },
     updateNextFigure() {
 
@@ -47,6 +46,8 @@ Game.fieldElement.style = `
     height: ${FIELD_HEIGHT * CELL_SIZE}px;
     background-size: ${CELL_SIZE}px ${CELL_SIZE}px
 `;
+Game.nextPieceElement.style.height = `${CELL_SIZE*2}px`;
+Game.nextPieceElement.style.width = `${CELL_SIZE*4}px`;
 
 
 

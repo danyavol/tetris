@@ -4,7 +4,6 @@ if (document.documentElement.clientWidth < 600) {
 
 window.addEventListener('contextmenu', (e) => {
     e.preventDefault();
-    e.stopPropagation();
 });
 
 /*************** Game controls ***************/
