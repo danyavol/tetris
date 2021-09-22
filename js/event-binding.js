@@ -16,10 +16,10 @@ document.addEventListener('keydown', (e) => {
                 Game.currentFigure.rotate();
                 break;
             case 'ArrowRight':
-                Game.currentFigure.moveRight();
+                Game.sideMoveStart('right');
                 break;
             case 'ArrowLeft':
-                Game.currentFigure.moveLeft();
+                Game.sideMoveStart('left');
                 break;
             case 'ArrowDown':
                 Game.fastDropStart();
@@ -29,27 +29,29 @@ document.addEventListener('keydown', (e) => {
 
 document.addEventListener('keyup', (e) => {
     switch (e.code) {
+        case 'ArrowRight':
+        case 'ArrowLeft':
+            Game.sideMoveEnd();
+            break;
         case 'ArrowDown':
             Game.fastDropEnd();
             break;
     }
 });
 
-document.getElementById('control-btn-left').addEventListener('click', () => {
-    if (!Game.paused && Game.currentFigure) Game.currentFigure.moveLeft();
-});
+document.getElementById('control-btn-left').addEventListener('touchstart', () => Game.sideMoveStart('left'));
+document.getElementById('control-btn-left').addEventListener('touchend', () => Game.sideMoveEnd());
 
-document.getElementById('control-btn-right').addEventListener('click', () => {
-    if (!Game.paused && Game.currentFigure) Game.currentFigure.moveRight();
-});
+document.getElementById('control-btn-right').addEventListener('touchstart', () => Game.sideMoveStart('right'));
+document.getElementById('control-btn-right').addEventListener('touchend', () => Game.sideMoveEnd());
+
 
 document.getElementById('control-btn-rotate').addEventListener('click', () => {
     if (!Game.paused && Game.currentFigure) Game.currentFigure.rotate();
 });
 
-document.getElementById('control-btn-down').addEventListener('click', () => {
-    
-});
+document.getElementById('control-btn-down').addEventListener('touchstart', () => Game.fastDropStart());
+document.getElementById('control-btn-down').addEventListener('touchend', () => Game.fastDropEnd());
 
 /*************** Game state ***************/
 
