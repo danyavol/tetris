@@ -22,9 +22,17 @@ document.addEventListener('keydown', (e) => {
                 Game.currentFigure.moveLeft();
                 break;
             case 'ArrowDown':
-
+                Game.fastDropStart();
                 break;
         }
+});
+
+document.addEventListener('keyup', (e) => {
+    switch (e.code) {
+        case 'ArrowDown':
+            Game.fastDropEnd();
+            break;
+    }
 });
 
 document.getElementById('control-btn-left').addEventListener('click', () => {

@@ -5,6 +5,8 @@ const Game = {
     nextPieceElement: document.querySelector('#next-piece'),
     map: new GameMap(),
     gameInterval: null,
+    prevSpeed: null,
+    fastDropActive: false,
     currentSpeed: 1.25,
     currentFigure: null,
     _nextFigureNumber: null,
@@ -19,12 +21,11 @@ const Game = {
     start() {
         this.started = true;
         this.paused = false;
-        step();
-        this.gameInterval = setInterval(step, 1000/this.currentSpeed);
+        this._startInterval();
     },
     pause() {
         this.paused = true;
-        clearInterval(this.gameInterval);
+        this._stopInterval();
     },
     reset() {
         this.pause();
@@ -32,11 +33,65 @@ const Game = {
         this.currentFigure = null;
         this._nextFigureNumber = null;
         this.currentSpeed = 1;
+        this.map = new GameMap();
         this._clearElement(this.fieldElement);
         this._clearElement(this.nextPieceElement);
     },
-    updateNextFigure() {
+    generateNextFigure() {
+        this.map.addFigure(this.currentFigure);
 
+        const completedLines = this.map.getCompletedLines();
+
+        if (completedLines) {
+            this.map.destroyCompletedLines(completedLines);
+
+            this.currentFigure = null;
+            this._stopInterval();
+
+            setTimeout(() => {
+                this.currentFigure = getFigureByNumber(this.nextFigure, this.fieldElement);
+                this.nextFigure = getRandomFigureNumber();
+                this._startInterval();
+            }, 1000);
+            return;
+        }
+
+        this.currentFigure = getFigureByNumber(this.nextFigure, this.fieldElement);
+        this.nextFigure = getRandomFigureNumber();
+    },
+    fastDropStart() {
+        if (!this.paused && !this.fastDropActive) {
+            this.fastDropActive = true;
+            this.prevSpeed = this.currentSpeed;
+            this.currentSpeed = 15;
+
+            if (this.gameInterval) {
+                this._stopInterval();
+                this._startInterval();
+            }
+        }
+    },
+    fastDropEnd() {
+        if (!this.paused && this.fastDropActive) {
+            this.fastDropActive = false;
+            this.currentSpeed = this.prevSpeed;
+            this.prevSpeed = null;
+
+            if (this.gameInterval) {
+                this._stopInterval();
+                this._startInterval();
+            }
+        }
+    },
+    _stopInterval() {
+        clearInterval(this.gameInterval);
+        this.gameInterval = null;
+    },
+    _startInterval() {
+        if (!this.gameInterval) {
+            step();
+            this.gameInterval = setInterval(step, 1000/this.currentSpeed);
+        }
     },
     _clearElement(element) {
         while (element.firstChild) 

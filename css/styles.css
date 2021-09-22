@@ -117,6 +117,11 @@
     position: absolute;
 }
 
+.piece.active {
+    filter: brightness(5);
+    transition: filter .4s;
+}
+
 .buttons-section {
     display: none;
     justify-content: space-between;

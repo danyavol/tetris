@@ -12,38 +12,111 @@ class BasicFigure {
     }
 
     rotate() {
+        const oldCoords = this._getPiecesCoords();
+
+        let xAdjustment = 0, yAdjustment = 0;
+
         /** Update pieces position */
         const conf = this.rotationConfig[this.rotation];
-        this.pieces.forEach( (piece, i) => piece.adjustPosition(...conf[i]) );
+        this.pieces.forEach( (piece, i) => {
+            piece.adjustPosition(...conf[i]);
+
+            let outOfSideBorder = Game.map.isCellOutOfSideBorder(piece.x);
+            if (outOfSideBorder === 'left') {
+                piece.x < xAdjustment ? xAdjustment = piece.x : null;
+            } else if (outOfSideBorder === 'right') {
+                piece.x - FIELD_WIDTH + 1 > xAdjustment ? xAdjustment = piece.x - FIELD_WIDTH + 1 : null;
+            }
+
+            if (Game.map.isCellOutOfBottomBorder(piece.y)) {
+                piece.y - FIELD_HEIGHT + 1 > yAdjustment ? yAdjustment = piece.y - FIELD_HEIGHT + 1 : null;
+            } 
+        });
+
+        /** Adjust coords and check if new coords is okay */
+        let isNewCoordsOkay = true;
+        this.pieces.forEach(piece => {
+            piece.adjustPosition(-xAdjustment, -yAdjustment);
+            
+            if (Game.map.isCellTaken(piece.x, piece.y))
+                isNewCoordsOkay = false;
+        });
+
+        /** Cannot rotate, applying old coords */
+        if (!isNewCoordsOkay) {
+            this._applyPiecesCoords(oldCoords);
+            return;
+        }
 
         /** Update pieces rotation */
         if (this.rotation < 3) this.rotation++;
         else this.rotation = 0;
         this.pieces.forEach(piece => piece.rotation = this.rotation);
 
-
-        // TODO: Check if piece not out of border or not cross other pieces
-
         this.render();
     }
 
     cellDown() {
-        this.pieces.forEach(piece => piece.y++);
+        const oldCoords = this._getPiecesCoords();
+
+        let hasDropped = false;
+        this.pieces.forEach(piece => {
+            if (Game.map.isCellOutOfBottomBorder(++piece.y) || Game.map.isCellTaken(piece.x, piece.y))
+                hasDropped = true;
+        });
+
+        if (hasDropped) {
+            this._applyPiecesCoords(oldCoords);
+            Game.generateNextFigure();
+            return;
+        }
+        
         this.render();
     }
 
     moveRight() {
-        this.pieces.forEach(piece => piece.x++);
+        const oldCoords = this._getPiecesCoords();
+        
+        for (let piece of this.pieces) {
+            if (Game.map.isCellOutOfSideBorder(++piece.x) || Game.map.isCellTaken(piece.x, piece.y)) {
+                this._applyPiecesCoords(oldCoords);
+                return;
+            }
+        }
+
         this.render();
     }
 
     moveLeft() {
-        this.pieces.forEach(piece => piece.x--);
+        const oldCoords = this._getPiecesCoords();
+
+        for (let piece of this.pieces) {
+            if (Game.map.isCellOutOfSideBorder(--piece.x) || Game.map.isCellTaken(piece.x, piece.y)) {
+                this._applyPiecesCoords(oldCoords);
+                return;
+            }
+        }
+
         this.render();
     }
 
     render() {
         this.pieces.forEach(piece => piece.render());
+    }
+
+    _getPiecesCoords() {
+        const coords = [];
+        this.pieces.forEach((piece, i) => 
+            coords[i] = {x: piece.x, y: piece.y}
+        );
+        return coords;
+    }
+
+    _applyPiecesCoords(coords) {
+        this.pieces.forEach((piece, i) => {
+            piece.x = coords[i].x;
+            piece.y = coords[i].y;
+        });
     }
 
     _initPieces(piecesConfig, indent) {
