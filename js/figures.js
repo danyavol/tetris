@@ -6,6 +6,7 @@ class BasicFigure {
         this.rotation = defaultRotation;
         this.rotationConfig = rotationConfig;
         this.rootElement = rootElement;
+        this.firstCellDownCall = true;
         
         this._initPieces(piecesConfig, withIndent ? defaultIndent : [0, 0]);
         this.render();
@@ -66,12 +67,18 @@ class BasicFigure {
         });
 
         if (hasDropped) {
-            this._applyPiecesCoords(oldCoords);
-            Game.generateNextFigure();
-            return;
+            if (this.firstCellDownCall) {
+                Game.gameOver();
+                return;
+            } else {
+                this._applyPiecesCoords(oldCoords);
+                Game.generateNewFigure();
+                return;
+            }
         }
         
         this.render();
+        this.firstCellDownCall = false;
     }
 
     moveRight() {

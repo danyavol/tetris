@@ -26,7 +26,7 @@ const Stats = {
             this._timeTotal = 0;
             this._timeStart = 0;
             this._timePaused = true;
-            this._timeElement.innerText = '';
+            this._render();
         },
         start() {
             this._timePaused = false;
@@ -61,170 +61,196 @@ const Stats = {
     }
 }
 
-Stats.init();
-
 const Game = {
-    started: false,
-    paused: true,
-    fieldElement: document.querySelector('#game-field'),
-    nextPieceElement: document.querySelector('#next-piece'),
-    map: new GameMap(),
-    gameInterval: null,
-    prevSpeed: null,
-    fastDropActive: false,
-    currentSpeed: 1.25,
-    speed: 1.25,
-    currentFigure: null,
-    _nextFigureNumber: null,
-    set nextFigure(number) {
-        this._nextFigureNumber = number;
-        this.nextPieceElement.innerHTML = '';
-        getFigureByNumber(number, this.nextPieceElement, false);
+    gameFieldElem: document.querySelector('#game-field'),
+    nextPieceElem: document.querySelector('#next-piece'),
+
+    reset() {
+        this.flags = {
+            started: false,
+            paused: true,
+            fastDropActive: false
+        };
+        this.map = new GameMap();
+        this.speed = 1;
+        this.currentSpeed = 1;
+        this.currentFigure = null;
+        this.nextFigureNumber = null;
+        this.gameLoop = null;
+        this.pressedSideButtons = [];
+        this.movementInterval = null;
+        this._clearElement(this.gameFieldElem);
+        this._clearElement(this.nextPieceElem);
+        Stats.init();
     },
-    get nextFigure() {
-        return this._nextFigureNumber;
-    },
+
     start() {
-        this.started = true;
-        this.paused = false;
-        this._startInterval();
+        this.flags.started = true;
+        this.flags.paused = false;
+        this._startGameLoop();
         Stats.time.start();
     },
+
     pause() {
-        this.paused = true;
-        this._stopInterval();
+        this.flags.paused = true;
+        this._stopGameLoop();
         Stats.time.pause();
     },
-    reset() {
+
+    gameOver() {
+        this.flags.started = false;
         this.pause();
-        this.started = false;
-        this.currentFigure = null;
-        this._nextFigureNumber = null;
-        this.currentSpeed = 1.25;
-        this.speed = 1.25;
-        this.map = new GameMap();
-        this._clearElement(this.fieldElement);
-        this._clearElement(this.nextPieceElement);
-        Stats.time.reset();
-        Stats.score.reset();
+        DOM.START_PAUSE_BTNS.forEach(elem => elem.classList.add('d-none'));
+        DOM.RESTART_BTNS.forEach(elem => elem.classList.remove('d-none'));
+        if (isMobileDevice()) DOM.MOBILE_MENU.classList.remove('hidden');
     },
-    generateNextFigure() {
+
+    generateNewFigure() {
         this.map.addFigure(this.currentFigure);
 
         const completedLines = this.map.getCompletedLines();
-
         if (completedLines) {
-            this.map.destroyCompletedLines(completedLines);
-
             this.currentFigure = null;
-            this._stopInterval();
+            this._stopGameLoop();
+            this.map.destroyCompletedLines(completedLines);
+            this._updateScore(completedLines);
+            this._updateSpeed();
 
-            setTimeout(() => {
-                this.currentFigure = getFigureByNumber(this.nextFigure, this.fieldElement);
-                this.nextFigure = getRandomFigureNumber();
-                this._startInterval();
-            }, 1000);
+            setTimeout(() => this._startGameLoop(), 1000);
+        } else {
+            this.currentFigure = null;
+            this._step();
+        }
+    },
 
+    _step() {
+        if (this.nextFigureNumber == null) 
+            this.nextFigureNumber = getRandomFigureNumber();
+
+        if (this.currentFigure == null) {
+            this.currentFigure = getFigureByNumber(this.nextFigureNumber, this.gameFieldElem);
+
+            this.nextFigureNumber = getRandomFigureNumber();
+            this._clearElement(this.nextPieceElem);
+            getFigureByNumber(this.nextFigureNumber, this.nextPieceElem, false);
+            return;
+        }
+
+        this.currentFigure.cellDown();
+    },
+
+
+
+    // Helpers
+
+    _startGameLoop() {
+        if (!this.gameLoop) {
+            this._step();
+            this.gameLoop = setInterval(() => this._step(), 1000/this.currentSpeed);
+        }
+    },
+
+    _stopGameLoop() {
+        clearInterval(this.gameLoop);
+        this.gameLoop = null;
+    },
+
+    _updateScore(completedLines) {
+        if (completedLines)
             switch (completedLines.length) {
                 case 4: Stats.score.add(15); break;
                 case 3: Stats.score.add(7); break;
                 case 2: Stats.score.add(3); break;
                 default: Stats.score.add(1);
             }
-            this.increseSpeed();
-            return;
-        }
+    },
 
-        this.currentFigure = getFigureByNumber(this.nextFigure, this.fieldElement);
-        this.nextFigure = getRandomFigureNumber();
+    _updateSpeed() {
+        const newSpeed = 1 + Math.floor(Stats.score.score / 5)*0.5;
+        console.log('speed up', newSpeed);
+        if (this.currentSpeed === this.speed) 
+            this.currentSpeed = newSpeed;
+        this.speed = newSpeed;
     },
-    increseSpeed() {
-        this.speed = 1.25 + Math.floor(Stats.score.score / 8);
-    },
-    sideMoveStart(direction) {
-        this.movementDirection = direction;
 
-        if (!this.movementInterval) {
-            this._move();
-            this.movementInterval = setInterval(() => this._move(), 130);
-        }
-    },
-    sideMoveEnd() {
-        clearInterval(this.movementInterval);
-        this.movementInterval = null;
-    },
-    _move() {
-        if (this.currentFigure && !this.paused) {
-            if (this.movementDirection == 'left')
-                this.currentFigure.moveLeft();
-            else if (this.movementDirection == 'right')
-                this.currentFigure.moveRight();
-        } 
-    },
-    fastDropStart() {
-        if (!this.paused && !this.fastDropActive) {
-            this.fastDropActive = true;
-            this.currentSpeed = 12;
-
-            if (this.gameInterval) {
-                this._stopInterval();
-                this._startInterval();
-            }
-        }
-    },
-    fastDropEnd() {
-        if (!this.paused && this.fastDropActive) {
-            this.fastDropActive = false;
-            this.currentSpeed = this.speed;
-
-            if (this.gameInterval) {
-                this._stopInterval();
-                this._startInterval();
-            }
-        }
-    },
-    _stopInterval() {
-        clearInterval(this.gameInterval);
-        this.gameInterval = null;
-    },
-    _startInterval() {
-        if (!this.gameInterval) {
-            step();
-            this.gameInterval = setInterval(step, 1000/this.currentSpeed);
-        }
-    },
     _clearElement(element) {
         while (element.firstChild) 
             element.removeChild(element.firstChild);
-    }
+    },
+
+
+
+    // Movement
+
+    sideMoveStart(direction) {
+        if (this.pressedSideButtons.indexOf(direction) == -1)
+            this.pressedSideButtons.push(direction);
+
+        if (this.movementInterval == null) {
+            this._sideMove();
+            this.movementInterval = setInterval(() => this._sideMove(), 130);
+        }
+    },
+
+    sideMoveEnd(direction) {
+        if (this.pressedSideButtons.length == 1) {
+            this.pressedSideButtons = [];
+            clearInterval(this.movementInterval);
+            this.movementInterval = null;
+        }
+        else if (this.pressedSideButtons.length == 2) {
+            let i = this.pressedSideButtons.indexOf(direction);
+            if (i == 0) this.pressedSideButtons = [ this.pressedSideButtons[1] ];
+            else if (i == 1) this.pressedSideButtons = [ this.pressedSideButtons[0] ];
+        }
+    },
+
+    _sideMove() {
+        const pb = this.pressedSideButtons;
+        const direction = pb.length ? pb[pb.length-1] : null;
+        if (this.currentFigure && !this.flags.paused && direction) {
+            if (direction == 'left')
+                this.currentFigure.moveLeft();
+            else if (direction == 'right')
+                this.currentFigure.moveRight();
+        } 
+    },
+
+    fastDropStart() {
+        if (!this.flags.paused && !this.flags.fastDropActive) {
+            this.flags.fastDropActive = true;
+            this.currentSpeed = 15;
+
+            if (this.gameLoop) {
+                this._stopGameLoop();
+                this._startGameLoop();
+            }
+        }
+    },
+
+    fastDropEnd() {
+        if (!this.flags.paused && this.flags.fastDropActive) {
+            this.flags.fastDropActive = false;
+            this.currentSpeed = this.speed;
+
+            if (this.gameLoop) {
+                this._stopGameLoop();
+                this._startGameLoop();
+            }
+        }
+    },
+    
+    
 };
 
 
-Game.fieldElement.style = `
+Game.gameFieldElem.style = `
     width: ${FIELD_WIDTH * CELL_SIZE}px;
     height: ${FIELD_HEIGHT * CELL_SIZE}px;
     background-size: ${CELL_SIZE}px ${CELL_SIZE}px
 `;
-Game.nextPieceElement.style.height = `${CELL_SIZE*2}px`;
-Game.nextPieceElement.style.width = `${CELL_SIZE*4}px`;
+Game.nextPieceElem.style.height = `${CELL_SIZE*2}px`;
+Game.nextPieceElem.style.width = `${CELL_SIZE*4}px`;
 
 
-
-
-
-
-function step() {
-    if (!Game.currentFigure && !Game.nextFigure) {
-        // Very first step
-        Game.nextFigure = getRandomFigureNumber();
-        Game.currentFigure = getFigureByNumber(getRandomFigureNumber(), Game.fieldElement);
-    } else if (!Game.currentFigure && Game.nextFigure) {
-        // Generate next piece
-        Game.currentFigure = getFigureByNumber(Game.nextFigure, Game.fieldElement);
-        Game.nextFigure = getRandomFigureNumber();
-    } else {
-        // Drop current piece
-        Game.currentFigure.cellDown();
-
-    }
-}
+Game.reset();

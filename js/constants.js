@@ -12,3 +12,11 @@ function getCellSize() {
     }
     return Math.floor( (document.documentElement.clientHeight - 20) / FIELD_HEIGHT );
 }
+
+
+
+const DOM = {
+    START_PAUSE_BTNS: document.querySelectorAll('.game-control-btn'),
+    RESTART_BTNS: document.querySelectorAll('.restart-btn'),
+    MOBILE_MENU: document.getElementById('mobile-menu'),
+}

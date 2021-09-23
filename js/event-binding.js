@@ -10,28 +10,29 @@ window.addEventListener('contextmenu', (e) => {
 /*************** Game controls ***************/
 
 document.addEventListener('keydown', (e) => {
-    if (!Game.paused && Game.currentFigure)
-        switch (e.code) {
-            case 'ArrowUp':
-                Game.currentFigure.rotate();
-                break;
-            case 'ArrowRight':
-                Game.sideMoveStart('right');
-                break;
-            case 'ArrowLeft':
-                Game.sideMoveStart('left');
-                break;
-            case 'ArrowDown':
-                Game.fastDropStart();
-                break;
-        }
+    switch (e.code) {
+        case 'ArrowUp':
+            if (!Game.flags.paused && Game.currentFigure) Game.currentFigure.rotate();
+            break;
+        case 'ArrowRight':
+            Game.sideMoveStart('right');
+            break;
+        case 'ArrowLeft':
+            Game.sideMoveStart('left');
+            break;
+        case 'ArrowDown':
+            Game.fastDropStart();
+            break;
+    }
 });
 
 document.addEventListener('keyup', (e) => {
     switch (e.code) {
         case 'ArrowRight':
+            Game.sideMoveEnd('right');
+            break;
         case 'ArrowLeft':
-            Game.sideMoveEnd();
+            Game.sideMoveEnd('left');
             break;
         case 'ArrowDown':
             Game.fastDropEnd();
@@ -40,14 +41,14 @@ document.addEventListener('keyup', (e) => {
 });
 
 document.getElementById('control-btn-left').addEventListener('touchstart', () => Game.sideMoveStart('left'));
-document.getElementById('control-btn-left').addEventListener('touchend', () => Game.sideMoveEnd());
+document.getElementById('control-btn-left').addEventListener('touchend', () => Game.sideMoveEnd('left'));
 
 document.getElementById('control-btn-right').addEventListener('touchstart', () => Game.sideMoveStart('right'));
-document.getElementById('control-btn-right').addEventListener('touchend', () => Game.sideMoveEnd());
+document.getElementById('control-btn-right').addEventListener('touchend', () => Game.sideMoveEnd('right'));
 
 
 document.getElementById('control-btn-rotate').addEventListener('click', () => {
-    if (!Game.paused && Game.currentFigure) Game.currentFigure.rotate();
+    if (!Game.flags.paused && Game.currentFigure) Game.currentFigure.rotate();
 });
 
 document.getElementById('control-btn-down').addEventListener('touchstart', () => Game.fastDropStart());
@@ -56,36 +57,46 @@ document.getElementById('control-btn-down').addEventListener('touchend', () => G
 /*************** Game state ***************/
 
 document.querySelectorAll('.game-control-btn, .mobile-pause').forEach(elem => elem.addEventListener('click', () => {
-    if (Game.paused) {
-        document.querySelectorAll('.game-control-btn').forEach(elem => elem.innerText = 'Pause');
-        document.getElementById('mobile-menu').classList.add('hidden');
+    if (Game.flags.paused) {
+        DOM.START_PAUSE_BTNS.forEach(elem => elem.innerText = 'Pause');
+        DOM.MOBILE_MENU.classList.add('hidden');
         
-        if (document.documentElement.clientWidth < 600) setTimeout(() => Game.start(), 400);
-        else Game.start();
+        if (isMobileDevice()) 
+            setTimeout(() => Game.start(), 400);
+        else 
+            Game.start();
     } else {
-        document.querySelectorAll('.game-control-btn').forEach(elem => elem.innerText = 'Resume');
+        DOM.START_PAUSE_BTNS.forEach(elem => elem.innerText = 'Resume');
         
-        if (document.documentElement.clientWidth < 600) 
-            document.getElementById('mobile-menu').classList.remove('hidden');
+        if (isMobileDevice()) DOM.MOBILE_MENU.classList.remove('hidden');
 
         Game.pause();
     }
 
-    if (Game.started) {
-        document.querySelectorAll('.restart-btn').forEach(elem => elem.classList.remove('d-none'));
-    } else {
-        document.querySelectorAll('.restart-btn').forEach(elem => elem.classList.add('d-none'));
-    }
+    if (Game.flags.started) 
+        DOM.RESTART_BTNS.forEach(elem => elem.classList.remove('d-none'));
+    else 
+        DOM.RESTART_BTNS.forEach(elem => elem.classList.add('d-none'));
+    
 }));
 
 document.querySelectorAll('.restart-btn').forEach(elem => elem.addEventListener('click', () => {
-    if (Game.paused)
-        document.querySelectorAll('.game-control-btn').forEach(elem => elem.innerText = 'Pause');
+    DOM.START_PAUSE_BTNS.forEach(elem => elem.classList.remove('d-none'));
+
+    if (Game.flags.paused)
+        DOM.START_PAUSE_BTNS.forEach(elem => elem.innerText = 'Pause');
         
-    document.getElementById('mobile-menu').classList.add('hidden');
+    DOM.MOBILE_MENU.classList.add('hidden');
     Game.reset();
 
-    if (document.documentElement.clientWidth < 600) setTimeout(() => Game.start(), 400);
-    else Game.start();
+    if (isMobileDevice()) 
+        setTimeout(() => Game.start(), 400);
+    else 
+        Game.start();
 }));
+
+
+function isMobileDevice() {
+    return document.documentElement.clientWidth < 600;
+}
 
