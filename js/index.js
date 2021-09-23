@@ -7,7 +7,7 @@ const Stats = {
         get score() {
             return this._score;
         },
-        _scoreElement: document.getElementById('stats-scrore'),
+        _scoreElement: document.getElementById('stats-score'),
         add(num) {
             this._score += num;
             this._render();

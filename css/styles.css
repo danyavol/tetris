@@ -72,6 +72,15 @@
     margin-bottom: 20px;
 }
 
+#stats-time, #stats-score {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+#stats-score {
+    color: yellow;
+}
+
 @media only screen and (max-width: 600px) {
     .info-section {
         margin-right: 0;

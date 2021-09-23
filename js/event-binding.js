@@ -1,4 +1,4 @@
-if (document.documentElement.clientWidth < 600) {
+if (isMobileDevice()) {
     document.getElementById('mobile-menu').classList.remove('hidden');
 }
 
@@ -6,6 +6,10 @@ window.addEventListener('contextmenu', (e) => {
     e.preventDefault();
     e.stopPropagation();
 });
+
+function isMobileDevice() {
+    return document.documentElement.clientWidth < 600;
+}
 
 /*************** Game controls ***************/
 
@@ -47,7 +51,7 @@ document.getElementById('control-btn-right').addEventListener('touchstart', () =
 document.getElementById('control-btn-right').addEventListener('touchend', () => Game.sideMoveEnd('right'));
 
 
-document.getElementById('control-btn-rotate').addEventListener('click', () => {
+document.getElementById('control-btn-rotate').addEventListener('touchstart', () => {
     if (!Game.flags.paused && Game.currentFigure) Game.currentFigure.rotate();
 });
 
@@ -94,9 +98,3 @@ document.querySelectorAll('.restart-btn').forEach(elem => elem.addEventListener(
     else 
         Game.start();
 }));
-
-
-function isMobileDevice() {
-    return document.documentElement.clientWidth < 600;
-}
-
