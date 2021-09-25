@@ -76,7 +76,7 @@ const Game = {
         this.currentSpeed = 1;
         this.currentFigure = null;
         this.nextFigureNumber = null;
-        this.gameLoop = null;
+        this._stopGameLoop();
         this.pressedSideButtons = [];
         this.movementInterval = null;
         this._clearElement(this.gameFieldElem);
