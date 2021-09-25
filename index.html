@@ -10,29 +10,61 @@
     <link rel="stylesheet" href="css/fonts.css">
     <link rel="stylesheet" href="css/buttons.css">
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/help.css">
     <title>Danya Tetris</title>
 </head>
 <body>
 
     <div class="container">
-        <div class="info-section">
-            <h2 class="title">Danya Tetris</h2>
-            <div class="btn-menu">
-                <button class="button game-control-btn">Start game</button>
-                <button class="button restart-btn d-none">Restart game</button>
-            </div>
-            <div class="game-info-section">
-                <div id="next-piece"></div>
-                <div class="stats">
-                    <div>Score: <span id="stats-score"></span></div>
-                    <div>Time: <span id="stats-time"></span></div>
+        <div>
+
+            <div class="info-section">
+                <h2 class="title">Danya Tetris</h2>
+                <div class="btn-menu">
+                    <button class="button game-control-btn">Start game</button>
+                    <button class="button restart-btn d-none">Restart game</button>
                 </div>
-                <div class="mobile-pause">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px">
-                        <path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-                    </svg>
+                <div class="game-info-section">
+                    <div id="next-piece"></div>
+                    <div class="stats">
+                        <div>Score: <span id="stats-score"></span></div>
+                        <div>Time: <span id="stats-time"></span></div>
+                    </div>
+                    <div class="mobile-pause">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px">
+                            <path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                        </svg>
+                    </div>
                 </div>
             </div>
+
+            <div class="controls-help">
+                <div class="control">
+                    <div class="key-icon rotate-180">
+                        <img src="icons/right-arrow-alt.svg">
+                    </div>
+                    <div class="description">Move left</div>
+                </div>
+                <div class="control">
+                    <div class="key-icon">
+                        <img src="icons/right-arrow-alt.svg">
+                    </div>
+                    <div class="description">Move right</div>
+                </div>
+                <div class="control">
+                    <div class="key-icon rotate-270">
+                        <img src="icons/right-arrow-alt.svg">
+                    </div>
+                    <div class="description">Rotate</div>
+                </div>
+                <div class="control">
+                    <div class="key-icon rotate-90">
+                        <img src="icons/right-arrow-alt.svg">
+                    </div>
+                    <div class="description">Fast drop</div>
+                </div>
+            </div>
+
         </div>
 
         <div id="game-field"></div>
